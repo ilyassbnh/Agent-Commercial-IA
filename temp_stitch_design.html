@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Midnight Souk AI V2</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eeba2b",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#022c22", // Custom Emerald for theme consistency
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #022c22;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(238, 186, 43, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(238, 186, 43, 0.08) 0%, transparent 40%);
+        }
+        
+        .glass-panel {
+            background: rgba(2, 44, 34, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(238, 186, 43, 0.2);
+        }
+
+        .product-card {
+            background: rgba(2, 44, 34, 0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(238, 186, 43, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            border-color: rgba(238, 186, 43, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px rgba(238, 186, 43, 0.1);
+        }
+
+        .logo-char {
+            display: inline-block;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(238, 186, 43, 0.3);
+            border-radius: 10px;
+        }
+
+        .glow-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(238, 186, 43, 0);
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 15px rgba(238, 186, 43, 0.4);
+        }
+    </style>
+</head>
+<body class="font-display text-white min-h-screen selection:bg-primary/30">
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 h-20 flex items-center justify-between px-10 z-50 glass-panel border-b border-primary/20">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="text-3xl font-serif font-bold text-primary tracking-tighter">
+<!-- Spans for GSAP character animation -->
+<span class="logo-char">S</span><span class="logo-char">o</span><span class="logo-char">u</span><span class="logo-char">k</span>
+<span class="logo-char ml-2">A</span><span class="logo-char">I</span>
+</span>
+</div>
+<nav class="hidden md:flex items-center gap-8 text-sm font-medium tracking-widest uppercase">
+<a class="hover:text-primary transition-colors text-white/70" href="#">Collections</a>
+<a class="hover:text-primary transition-colors text-white/70" href="#">My Vault</a>
+<a class="hover:text-primary transition-colors text-white/70" href="#">About</a>
+<button class="bg-primary/10 border border-primary/40 px-6 py-2 rounded-full text-primary hover:bg-primary hover:text-background-dark transition-all">
+                Connect Wallet
+            </button>
+</nav>
+<div class="md:hidden">
+<span class="material-icons text-primary cursor-pointer">menu</span>
+</div>
+</header>
+<main class="flex h-screen pt-20 overflow-hidden">
+<!-- Left Panel: Product Grid -->
+<section class="flex-1 overflow-y-auto custom-scrollbar p-8 lg:p-12">
+<div class="max-w-4xl mx-auto">
+<div class="mb-10">
+<h2 class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-2">Curated Selection</h2>
+<h1 class="text-4xl font-serif font-bold mb-4">The Collection</h1>
+<p class="text-white/60 max-w-xl">Rare treasures from the heart of the Atlas Mountains, authenticated by AI and ready for your negotiation.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Product 1 -->
+<div class="product-card rounded-xl overflow-hidden group">
+<div class="aspect-[4/5] relative overflow-hidden">
+<img alt="Tapis Berbère" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Intricately woven traditional Berber rug with crimson patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDWCntaphvPhBJWywdlmcBfuV9-P8DqU7Bc7QhgtglVs4HqDXZ1L0Qe6Fr1V85VP1VtTQJ04QzGDDRMMYf8_h5DNlv1tUbcciMy6DmYG12m29ZO-yhrjYWSn7LMp4yw6SCdVhnGVSHAX7-yVasD75rEHHo-fL-0hyUnPsMuJ8h6pclzb1eQ9K5A1o4QmlJIbEdJkP3T_lx_iiise3a-thtJteGWc9LwkwoKUehI6xLZl4U5Djeh-xgGNqe9_2F55xh-uK52Ag0qe4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                                Rare Find
+                            </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-serif text-white">Tapis Berbère</h3>
+<span class="text-primary font-bold">1,200 MAD</span>
+</div>
+<p class="text-white/50 text-sm mb-6 line-clamp-2">Hand-woven by artisans in the Middle Atlas using pure sheep's wool and natural henna dyes.</p>
+<button class="glow-button w-full bg-primary py-3 rounded-lg text-background-dark font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2">
+<span class="material-icons text-sm">gavel</span>
+                                Négocier
+                            </button>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="product-card rounded-xl overflow-hidden group">
+<div class="aspect-[4/5] relative overflow-hidden">
+<img alt="Théière Artisanale" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Engraved silver Moroccan teapot on a brass tray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyOWQxj19c5r2vOD5ttYttgSVWGDo-PIzoBxZtVa88ffENAsJ_VyBicyD_RyVZW-1Pn5uwVb4cCoXE2TAw6u4tY1ByDTLZxWZLQhtxITSU3IG2C1yU64ZELLucQ2Njsnv5_BLvdW9uzZ7LBgahbqeIkRmNtgn4pvwc_7sforMJUP99cEcF5I2F_1Mah-uLZESg-ER3aUrNcqyVJPYqxyKan2v_LesjNzoNOOna938sZ_CCV1NbYx_w3OYhad7wUBcLY8q4luP0SPg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-4 left-4 bg-primary text-background-dark text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                                Hand-Crafted
+                            </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-serif text-white">Théière Argent</h3>
+<span class="text-primary font-bold">450 MAD</span>
+</div>
+<p class="text-white/50 text-sm mb-6 line-clamp-2">A masterfully engraved silver-plated teapot featuring traditional Moorish geometric patterns.</p>
+<button class="glow-button w-full bg-primary/20 border border-primary/50 py-3 rounded-lg text-primary font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2">
+<span class="material-icons text-sm">gavel</span>
+                                Négocier
+                            </button>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="product-card rounded-xl overflow-hidden group">
+<div class="aspect-[4/5] relative overflow-hidden">
+<img alt="Céramique de Fès" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Set of colorful hand-painted Moroccan ceramic bowls" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYU3PVKwhmFIKUHhXP4J62JMYUWGixOllWVl7JAC0XRyKlmlMf9XUvwwOOioJhODfDJvq6VhEOw9LGOnVjt1BjVz8Pwl-miytV-rK7MOJTmhObIwFaksTEmGqp67iejSvoda-50foZ5E9o6Q4neBXOXIhWQNZOeZ__nEUuDOn8plFcrAksJsNzwoOK2ZVHNcgPphi_jXUe9M8laFNx_PENK_0y0c-2--id00PgJ-r_O5jilc-hKeyTM0ZPWW1OfD4Fin7tTMwlLh4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent opacity-80"></div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-serif text-white">Plat en Céramique</h3>
+<span class="text-primary font-bold">280 MAD</span>
+</div>
+<p class="text-white/50 text-sm mb-6 line-clamp-2">Traditional Fès blue pottery with intricate lattice work and glazed finish.</p>
+<button class="glow-button w-full bg-primary/20 border border-primary/50 py-3 rounded-lg text-primary font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2">
+<span class="material-icons text-sm">gavel</span>
+                                Négocier
+                            </button>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="product-card rounded-xl overflow-hidden group">
+<div class="aspect-[4/5] relative overflow-hidden">
+<img alt="Lanterne Dorée" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Golden ornate Moroccan lantern with intricate cutouts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqUCsINFodLlah0b8RbNqBKun3ZN1Lm856bcAUKoxU-I7x8rKhJ0AdMiY9Q-kWorWC9NPAxEMoox2F2ZLu1mBDOILCiOfiRXogWIa7GyaGnxrCDdae8NuUJxqO4PnBueGzNNsbP6qQVIHsTc3L1sldKX89jRaUAtetGGsH6WRBp5Vf5SRwPcePs0lRB8mNb4_OCNseOj89ptSq6QuhFsRXS1AmwAENmTGsirJX6ZnM5v8CimjvaQWiBekjmcO6Lp6idWxRfxbiTdQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent opacity-80"></div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-serif text-white">Lanterne Royale</h3>
+<span class="text-primary font-bold">850 MAD</span>
+</div>
+<p class="text-white/50 text-sm mb-6 line-clamp-2">Brass lantern with amber glass inserts that casts mesmerizing shadows.</p>
+<button class="glow-button w-full bg-primary/20 border border-primary/50 py-3 rounded-lg text-primary font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2">
+<span class="material-icons text-sm">gavel</span>
+                                Négocier
+                            </button>
+</div>
+</div>
+</div>
+<div class="py-20 text-center">
+<p class="text-white/30 text-xs tracking-widest uppercase">End of tonight's curated selection</p>
+</div>
+</div>
+</section>
+<!-- Right Panel: Chat Interface -->
+<aside class="w-[450px] border-l border-primary/20 glass-panel flex flex-col hidden xl:flex">
+<!-- Chat Header -->
+<div class="p-6 border-b border-primary/10 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/20 border border-primary flex items-center justify-center">
+<span class="material-icons text-primary">auto_awesome</span>
+</div>
+<div>
+<h4 class="font-bold text-sm">Souk AI Concierge</h4>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-[10px] text-white/50 uppercase tracking-widest">Always Evaluating</span>
+</div>
+</div>
+</div>
+<!-- Chat Messages -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+<!-- AI Message -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-primary/10 border border-primary/30 p-4 rounded-xl rounded-tl-none">
+<p class="text-sm leading-relaxed text-white/90">
+                            Salutations, seeker of treasures. I am the Souk AI. Which of these handcrafted items has caught your eye tonight? I am prepared to negotiate a fair price for a soul of your taste.
+                        </p>
+</div>
+<span class="text-[10px] text-white/30 mt-2 ml-1">Souk AI • 2:00 AM</span>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end max-w-[85%] ml-auto">
+<div class="bg-primary p-4 rounded-xl rounded-tr-none">
+<p class="text-sm leading-relaxed text-background-dark font-medium">
+                            I'm interested in the Tapis Berbère. It's beautiful, but 1,200 MAD is a bit above my budget.
+                        </p>
+</div>
+<span class="text-[10px] text-white/30 mt-2 mr-1">You • 2:01 AM</span>
+</div>
+<!-- AI Message -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-primary/10 border border-primary/30 p-4 rounded-xl rounded-tl-none">
+<p class="text-sm leading-relaxed text-white/90">
+                            A fine choice. That rug was hand-woven for three moons. What would you consider a respectful offer for such dedication?
+                        </p>
+<div class="mt-4 flex flex-wrap gap-2">
+<button class="text-[10px] border border-primary/40 px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors">Offer 1,000 MAD</button>
+<button class="text-[10px] border border-primary/40 px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors">Offer 1,100 MAD</button>
+</div>
+</div>
+<span class="text-[10px] text-white/30 mt-2 ml-1">Souk AI • 2:01 AM</span>
+</div>
+<!-- AI Typing Indicator -->
+<div class="flex items-center gap-2 text-white/30">
+<div class="flex gap-1">
+<span class="w-1 h-1 bg-primary/50 rounded-full"></span>
+<span class="w-1 h-1 bg-primary/50 rounded-full"></span>
+<span class="w-1 h-1 bg-primary/50 rounded-full"></span>
+</div>
+<span class="text-[10px] uppercase tracking-widest">Evaluating your presence...</span>
+</div>
+</div>
+<!-- Chat Input -->
+<div class="p-6 pt-2">
+<div class="relative">
+<textarea class="w-full bg-white/5 border border-primary/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/60 transition-all placeholder:text-white/20 resize-none" placeholder="Type your offer..." rows="2"></textarea>
+<button class="absolute bottom-3 right-3 w-10 h-10 bg-primary text-background-dark rounded-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
+<span class="material-icons text-lg">send</span>
+</button>
+</div>
+<div class="mt-4 flex justify-between items-center text-[10px] text-white/40 uppercase tracking-widest px-1">
+<span>Negotiation Level: Intermediate</span>
+<span>12.5% Discount Possible</span>
+</div>
+</div>
+</aside>
+</main>
+<!-- Map context footer for location (hidden but present for requirements) -->
+<div class="hidden" data-location="Marrakech, Morocco" style=""></div>
+</body></html>
