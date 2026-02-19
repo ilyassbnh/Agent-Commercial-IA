@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onAskAgent }) => {
     const card = useRef(null);
     const imageRef = useRef(null);
     const detailsRef = useRef(null);
@@ -72,7 +72,9 @@ const ProductCard = ({ product }) => {
                         <button className="flex-1 py-3 border border-souk-gold text-souk-gold hover:bg-souk-gold hover:text-souk-dark uppercase font-bold tracking-widest transition-colors duration-300 text-xs">
                             View Details
                         </button>
-                        <button className="flex-1 py-3 bg-souk-emerald border border-souk-emerald text-white hover:bg-emerald-900 uppercase font-bold tracking-widest transition-colors duration-300 text-xs shadow-lg shadow-souk-emerald/20">
+                        <button
+                            onClick={onAskAgent}
+                            className="flex-1 py-3 bg-souk-emerald border border-souk-emerald text-white hover:bg-emerald-900 uppercase font-bold tracking-widest transition-colors duration-300 text-xs shadow-lg shadow-souk-emerald/20">
                             Ask Agent
                         </button>
                     </div>
