@@ -68,9 +68,14 @@ const ProductCard = ({ product }) => {
 
                 <div ref={detailsRef} className="opacity-0 transform translate-y-4">
                     <p className="text-gray-300 text-sm line-clamp-2 mb-4 font-light">{product.description}</p>
-                    <button className="w-full py-3 border border-souk-gold text-souk-gold hover:bg-souk-gold hover:text-souk-dark uppercase font-bold tracking-widest transition-colors duration-300">
-                        View Details
-                    </button>
+                    <div className="flex gap-2">
+                        <button className="flex-1 py-3 border border-souk-gold text-souk-gold hover:bg-souk-gold hover:text-souk-dark uppercase font-bold tracking-widest transition-colors duration-300 text-xs">
+                            View Details
+                        </button>
+                        <button className="flex-1 py-3 bg-souk-emerald border border-souk-emerald text-white hover:bg-emerald-900 uppercase font-bold tracking-widest transition-colors duration-300 text-xs shadow-lg shadow-souk-emerald/20">
+                            Ask Agent
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
