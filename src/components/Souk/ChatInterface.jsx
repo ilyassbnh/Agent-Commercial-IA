@@ -32,18 +32,46 @@ const ChatInterface = () => {
         }
     }, [messages]);
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!inputValue.trim()) return;
 
-        const newUserMsg = { id: Date.now(), text: inputValue, sender: 'User' };
+        const userMessage = inputValue;
+
+        const newUserMsg = { id: Date.now(), text: userMessage, sender: 'User' };
         setMessages(prev => [...prev, newUserMsg]);
         setInputValue("");
 
-        // Simulate AI Response
-        setTimeout(() => {
-            const newAiMsg = { id: Date.now() + 1, text: "A fascinating choice...", sender: 'AI' };
+        try {
+            const response = await fetch('https://n8n.deontex.com/webhook/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                    sessionId: 'user-123'
+                })
+            });
+
+            const data = await response.json();
+
+            const newAiMsg = {
+                id: Date.now() + 1,
+                text: data.response,
+                sender: 'AI'
+            };
+
             setMessages(prev => [...prev, newAiMsg]);
-        }, 1500);
+
+        } catch (error) {
+            console.error(error);
+
+            setMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                text: "Erreur : impossible de contacter l'agent IA.",
+                sender: 'AI'
+            }]);
+        }
     };
 
     return (
@@ -66,8 +94,8 @@ const ChatInterface = () => {
                 {messages.map((msg) => (
                     <div key={msg.id} className={`flex ${msg.sender === 'User' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.sender === 'User'
-                                ? 'bg-[var(--souk-gold)] text-[var(--souk-emerald)] rounded-tr-none'
-                                : 'bg-[var(--souk-emerald)] text-gray-200 border border-[var(--souk-gold-dim)] rounded-tl-none'
+                            ? 'bg-[var(--souk-gold)] text-[var(--souk-emerald)] rounded-tr-none'
+                            : 'bg-[var(--souk-emerald)] text-gray-200 border border-[var(--souk-gold-dim)] rounded-tl-none'
                             }`}>
                             {msg.text}
                         </div>
