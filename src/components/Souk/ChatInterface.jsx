@@ -2,24 +2,43 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
-const ChatInterface = () => {
+import { api } from '../../services/api';
+import MessageBubble from './Chat/MessageBubble';
+import ChatInput from './Chat/ChatInput';
+import TypingIndicator from './Chat/TypingIndicator';
+
+const ChatInterface = ({ isOpen, onClose, context }) => {
     const [messages, setMessages] = useState([
         { id: 1, text: "Welcome to the Midnight Souk. I am your concierge. What artifact do you seek?", sender: 'AI' }
     ]);
-    const [inputValue, setInputValue] = useState("");
+    const [isTyping, setIsTyping] = useState(false);
+
     const containerRef = useRef();
     const messagesEndRef = useRef(null);
 
+    // Initial Entry Animation
     useGSAP(() => {
-        // Initial entry animation for the entire chat panel
-        gsap.from(containerRef.current, {
-            y: 100,
-            opacity: 0,
-            duration: 1,
-            ease: 'elastic.out(1, 0.75)',
-            delay: 1.5 // Wait for Hero to finish
-        });
-    }, { scope: containerRef });
+        if (!containerRef.current) return;
+
+        if (isOpen) {
+            gsap.fromTo(containerRef.current,
+                { y: 100, opacity: 0, scale: 0.9 },
+                { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.2)' }
+            );
+        }
+    }, { scope: containerRef, dependencies: [isOpen] });
+
+    // Handle Context (e.g. User clicked "Ask Agent" on a product)
+    useEffect(() => {
+        if (context && context.initialMessage) {
+            // We'll handle context pre-filling differently with the new input component if needed,
+            // but for now let's just use the message directly if it's meant to be sent immediately,
+            // or pass it to the input.
+            // The previous logic setInputValue directly.
+            // Let's assume we want to auto-populate the input.
+            // We'll pass it as a prop to ChatInput.
+        }
+    }, [context]);
 
     // Animate new messages
     useEffect(() => {
@@ -30,31 +49,46 @@ const ChatInterface = () => {
             );
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [messages]);
+    }, [messages, isTyping]);
 
-    const handleSend = () => {
-        if (!inputValue.trim()) return;
+    const handleSend = async (text) => {
+        if (!text.trim()) return;
 
-        const newUserMsg = { id: Date.now(), text: inputValue, sender: 'User' };
+        const userText = text;
+        const newUserMsg = { id: Date.now(), text: userText, sender: 'User' };
+
         setMessages(prev => [...prev, newUserMsg]);
-        setInputValue("");
+        setIsTyping(true);
 
-        // Simulate AI Response
-        setTimeout(() => {
-            const newAiMsg = { id: Date.now() + 1, text: "A fascinating choice...", sender: 'AI' };
+        try {
+            // Call the API service
+            const response = await api.sendMessage(userText, context);
+
+            const newAiMsg = {
+                id: Date.now() + 1,
+                text: response.response || "The spirits are silent...",
+                sender: 'AI'
+            };
+
             setMessages(prev => [...prev, newAiMsg]);
-        }, 1500);
+        } catch (error) {
+            setMessages(prev => [...prev, { id: Date.now() + 1, text: "The connection to the Souk is disrupted.", sender: 'System' }]);
+        } finally {
+            setIsTyping(false);
+        }
     };
 
+    if (!isOpen) return null;
+
     return (
-        <div ref={containerRef} className="fixed bottom-6 right-6 w-96 glass-panel rounded-2xl flex flex-col overflow-hidden shadow-2xl z-50">
+        <div ref={containerRef} className="fixed bottom-6 right-6 w-96 glass-panel rounded-2xl flex flex-col overflow-hidden shadow-2xl z-50 border border-souk-gold/20">
             {/* Header */}
             <div className="bg-[var(--souk-emerald)] p-4 border-b border-[var(--souk-gold-dim)] flex justify-between items-center">
                 <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                     <span className="text-[var(--souk-gold)] font-serif font-bold tracking-wide">Souk AI Concierge</span>
                 </div>
-                <button className="text-[var(--souk-gold-dim)] hover:text-[var(--souk-gold)] transition-colors">
+                <button onClick={onClose} className="text-[var(--souk-gold-dim)] hover:text-[var(--souk-gold)] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                     </svg>
@@ -62,41 +96,17 @@ const ChatInterface = () => {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 h-80 overflow-y-auto p-4 space-y-4 bg-black/40 backdrop-blur-md">
+            <div className="flex-1 h-80 overflow-y-auto p-4 space-y-4 bg-black/80 backdrop-blur-md">
                 {messages.map((msg) => (
-                    <div key={msg.id} className={`flex ${msg.sender === 'User' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.sender === 'User'
-                                ? 'bg-[var(--souk-gold)] text-[var(--souk-emerald)] rounded-tr-none'
-                                : 'bg-[var(--souk-emerald)] text-gray-200 border border-[var(--souk-gold-dim)] rounded-tl-none'
-                            }`}>
-                            {msg.text}
-                        </div>
-                    </div>
+                    <MessageBubble key={msg.id} message={msg} />
                 ))}
+
+                {isTyping && <TypingIndicator />}
                 <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-[var(--souk-emerald)] border-t border-[var(--souk-gold-dim)]">
-                <div className="relative">
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                        placeholder="Make your offer..."
-                        className="w-full bg-black/30 text-white placeholder-gray-500 rounded-full py-3 px-5 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--souk-gold)] transition-all"
-                    />
-                    <button
-                        onClick={handleSend}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-[var(--souk-gold)] text-[var(--souk-emerald)] rounded-full hover:bg-white transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            <ChatInput onSend={handleSend} initialValue={context?.initialMessage || ""} />
         </div>
     );
 };

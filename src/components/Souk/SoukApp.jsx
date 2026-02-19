@@ -7,6 +7,18 @@ import MessageSection from './MessageSection';
 import { products } from './products';
 
 const SoukApp = () => {
+    const [isChatOpen, setIsChatOpen] = React.useState(true); // Default open for now
+    const [chatContext, setChatContext] = React.useState(null);
+
+    const handleAskAgent = (product) => {
+        setIsChatOpen(true);
+        setChatContext({
+            type: 'product_inquiry',
+            product: product,
+            initialMessage: `I am interested in the ${product.name}.`
+        });
+    };
+
     return (
         <div className="min-h-screen bg-souk-dark text-souk-light font-body relative selection:bg-souk-gold selection:text-souk-dark">
             <Navbar />
@@ -35,7 +47,7 @@ const SoukApp = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
                         {products.map((product, i) => (
                             <div key={product.id} className={`${i % 2 !== 0 ? 'md:translate-y-24' : ''}`}>
-                                <ProductCard product={product} />
+                                <ProductCard product={product} onAskAgent={() => handleAskAgent(product)} />
                             </div>
                         ))}
                     </div>
@@ -49,7 +61,7 @@ const SoukApp = () => {
                 </section>
             </main>
 
-            <ChatInterface />
+            <ChatInterface isOpen={isChatOpen} context={chatContext} onClose={() => setIsChatOpen(false)} />
         </div>
     );
 };
